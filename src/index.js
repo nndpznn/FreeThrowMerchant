@@ -15,7 +15,7 @@ require('dotenv').config();
 let XMLHttpRequest = require('xhr2').XMLHttpRequest;
 
 let numTries = 1;
-const RATE = 100;
+const RATE = 20;
 
 // Stupid random number function.
 function randomNum(chanceTotal) {
@@ -29,10 +29,11 @@ function randomNum(chanceTotal) {
 //     const data = await response.json();
 // }
 
-let request = new XMLHttpRequest();
-request.open('GET', 'https://www.balldontlie.io/api/v1/teams', true);
+let teamRequest = new XMLHttpRequest();
+teamRequest.open('GET', 'https://www.balldontlie.io/api/v1/teams', true);
 
-
+let pooleRequest = new XMLHttpRequest();
+pooleRequest.open('GET', 'https://www.balldontlie.io/api/v1/season_averages?player_ids[]=30', true);
 
 const ftm = new Client({
     // A set of permissions the bot needs to be able to respond to and interpret server events.
@@ -69,33 +70,6 @@ ftm.on('messageCreate', (message) => {
     //     return;
     // }
 
-    switch (message.content) {
-        case 'how many free throws does joel embiid have right now':
-            message.reply('too many.');
-            return;
-        case 'ftm online?':
-            message.reply('yes, online.');
-            return;
-        case 'gimme teams':
-            message.reply('this function is under construction.');
-            return;
-            // request.onload = function () {
-    
-            //     let data = JSON.parse(this.response);
-            
-            //     if (request.status >= 200 && request.status < 400) {
-            //         data.data.forEach((team) => {
-            //             message.channel.send(team.full_name);
-            //         })
-            //     } else {
-            //         console.log('error');
-            //     }
-            
-            // }
-            
-            // request.send();
-    }
-
     if (message.author.username === 'crayollaaaa' || message.author.username === 'gloobus') {
         let roll = randomNum(RATE)
         if (roll === 1) {
@@ -104,9 +78,90 @@ ftm.on('messageCreate', (message) => {
             console.log("did it.");
         } else {
             numTries++;
-            let stringRoll = roll.toString();
+            // let stringRoll = roll.toString();
             // message.channel.send(stringRoll);
         }
+    }
+
+    if (message.content === 'ftm goat') {
+        message.channel.send("The first player that comes up is Lonnie Walker IV.");
+        return;
+    }
+
+    if (message.content.slice(0,3) == "ftm") {
+        let messageWords = message.content.split(" ");
+
+        let playerRequest = new XMLHttpRequest();
+        playerRequest.open('GET', `https://www.balldontlie.io/api/v1/players?search=${messageWords[1]}`);
+
+        playerRequest.onload = function () {
+    
+            let data = JSON.parse(this.response);
+        
+            if (playerRequest.status >= 200 && playerRequest.status < 400) {
+                if (data.data.length > 0) {
+                    message.channel.send(`The first player that comes up is ${data.data[0].first_name} ${data.data[0].last_name}.`);
+                } else {
+                    message.channel.send("Not found.");
+                }
+            } else {
+                console.log('error');
+            }
+        
+        }
+
+        playerRequest.send();
+
+        let statRequest = new XMLHttpRequest();
+        return;
+    }
+
+
+    // Default responses.
+    switch (message.content) {
+        case 'help me ftm':
+            message.reply(
+                'Here\'s a list of commands you can use right now. \n - `we online?` checks the online status of FTM. \n- `ftm [player name]` returns the top search result for your entry in the nba player database. \n- `how many free throws does joel embiid have right now` gives the always-correct answer to that question. \n '
+            );
+            return;
+        case 'how many free throws does joel embiid have right now':
+            message.reply('too many.');
+            return;
+        case 'we online?':
+            message.reply('yes, online.');
+            return;
+        case 'gimme teams':
+            teamRequest.onload = function () {
+    
+                let data = JSON.parse(this.response);
+            
+                if (teamRequest.status >= 200 && teamRequest.status < 400) {
+                    data.data.forEach((team) => {
+                        message.channel.send(team.full_name);
+                    })
+                } else {
+                    console.log('error');
+                }
+            
+            }
+            
+            teamRequest.send();
+            return;
+
+        case 'poole fg':
+            pooleRequest.onload = function () {
+
+                let data = JSON.parse(this.response);
+
+                if (pooleRequest.status >= 200 && pooleRequest.status < 400) {
+                    let fgpct = data.data[0].fg_pct;
+                    message.channel.send(`Jordan Poole has a total FG% of ${fgpct}.`);
+                } else {
+                    console.log('error');
+                }
+            }
+            pooleRequest.send();
+            return;
     }
 
 });
