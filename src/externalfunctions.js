@@ -1,5 +1,8 @@
-function randomNum(chanceTotal) {
-    var num = Math.floor(Math.random() * chanceTotal);
-    console.log(num);
-    return num;
-}
+module.exports = {
+    // Stupid random number function.
+    randomNum: function (chanceTotal) {
+        let num = Math.floor(Math.random() * chanceTotal);
+        console.log(num);
+        return num;
+    }
+};

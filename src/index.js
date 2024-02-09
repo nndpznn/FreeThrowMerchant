@@ -5,35 +5,18 @@
 
 /**
  *  TO DO LIST:
- *      - Implement slash commands to accept player names as parameters, and return free throw stats.
+ *      - Implement commands to accept player names as parameters, and return free throw stats.
+ *      - Add a funny "mark my words" function to mark people's words.
  *      - Get better at making HTTP requests and all that.
  */
 
 const { Client, IntentsBitField, InteractionCollector } = require('discord.js');
 require('dotenv').config();
-// let externalfunctions = require('./externalfunctions.js')
+let externalfunctions = require('./externalfunctions');
 let XMLHttpRequest = require('xhr2').XMLHttpRequest;
 
 let numTries = 1;
 const RATE = 20;
-
-// Stupid random number function.
-function randomNum(chanceTotal) {
-    let num = Math.floor(Math.random() * chanceTotal);
-    console.log(num);
-    return num;
-}
-
-// async function fetchFreeThrows() {
-//     const response = await fetch('https://www.balldontlie.io/api/v1/teams');
-//     const data = await response.json();
-// }
-
-let teamRequest = new XMLHttpRequest();
-teamRequest.open('GET', 'https://www.balldontlie.io/api/v1/teams', true);
-
-let pooleRequest = new XMLHttpRequest();
-pooleRequest.open('GET', 'https://www.balldontlie.io/api/v1/season_averages?player_ids[]=30', true);
 
 const ftm = new Client({
     // A set of permissions the bot needs to be able to respond to and interpret server events.
@@ -53,7 +36,7 @@ const ftm = new Client({
 ftm.on('ready', (f) => {
 
     ftm.channels.cache.get("806334669280247829").send(`${f.user.username} is at the line, baby.`);
-    // ftm.channels.cache.get("806334669280247829").send("https://tenor.com/view/jordan-airball-missed-shot-basketball-free-throw-gif-13115757");
+    ftm.channels.cache.get("806334669280247829").send("https://tenor.com/view/jordan-airball-missed-shot-basketball-free-throw-gif-13115757");
     console.log(`${f.user.username} is at the line, baby.`);
 });
 
@@ -70,8 +53,8 @@ ftm.on('messageCreate', (message) => {
     //     return;
     // }
 
-    if (message.author.username === 'crayollaaaa' || message.author.username === 'gloobus') {
-        let roll = randomNum(RATE)
+    if (message.author.username === 'crayollaaaa' || message.author.username === 'kawaiileonard.') {
+        let roll = externalfunctions.randomNum(RATE);
         if (roll === 1) {
             message.reply(`bingo! at a rate of 1 in ${RATE}, that took you ${numTries} tries.`);
             numTries = 1;
@@ -85,6 +68,7 @@ ftm.on('messageCreate', (message) => {
 
     if (message.content === 'ftm goat') {
         message.channel.send("The first player that comes up is Lonnie Walker IV.");
+        message.channel.send('https://cdn.discordapp.com/attachments/806334669280247829/1205389341816258590/mwrg9zxzswafyjznyrgk.png?ex=65d8314e&is=65c5bc4e&hm=166d4ccab60e9676aae3b766674a225c5d85fd8db0a5f66ce4aea54833ebc58f&');
         return;
     }
 
@@ -131,6 +115,9 @@ ftm.on('messageCreate', (message) => {
             message.reply('yes, online.');
             return;
         case 'gimme teams':
+            let teamRequest = new XMLHttpRequest();
+            teamRequest.open('GET', 'https://www.balldontlie.io/api/v1/teams', true);
+
             teamRequest.onload = function () {
     
                 let data = JSON.parse(this.response);
@@ -149,6 +136,9 @@ ftm.on('messageCreate', (message) => {
             return;
 
         case 'poole fg':
+            let pooleRequest = new XMLHttpRequest();
+            pooleRequest.open('GET', 'https://www.balldontlie.io/api/v1/season_averages?player_ids[]=30', true);
+
             pooleRequest.onload = function () {
 
                 let data = JSON.parse(this.response);
