@@ -1,23 +1,19 @@
 /**
  * Thank you to Under Ctrl on YouTube and taniarascia.com for guidance on Discord Bots and 
- * connecting to APIs with JavaScript.
+ * connecting to APIs with JavaScript. Thank you to W3Schools for general guidance on JavaScript.
+ * And thank you to my server for funny ideas and good times, always.
  */
 
 /**
  *  TO DO LIST:
  *      - Implement commands to accept player names as parameters, and return free throw stats.
- *      - Add a funny "mark my words" function to mark people's words.
  *      - Get better at making HTTP requests and all that.
- *      - "Add me to/Remove me from bingo" function, that scrapes usernames and adds them to an array for bingo.
  */
 
 const { Client, IntentsBitField, InteractionCollector } = require('discord.js');
 require('dotenv').config();
 let externalfunctions = require('./externalfunctions');
 let XMLHttpRequest = require('xhr2').XMLHttpRequest;
-
-let numTries = 1;
-const RATE = 50;
 
 const ftm = new Client({
     // A set of permissions the bot needs to be able to respond to and interpret server events.
@@ -40,7 +36,7 @@ ftm.on('ready', (f) => {
     // ftm.channels.cache.get("806334669280247829").send(`${f.user.username} is at the line, baby.`);
     // ftm.channels.cache.get("806334669280247829").send("https://tenor.com/view/jordan-airball-missed-shot-basketball-free-throw-gif-13115757");
     // ftm.channels.cache.get("1208837446209380412").send(
-    //     "***PATCH NOTES*** - minor updates this time. \n- created new channel for notes about bot updates upon restarting. \n- added a couple more commands to `help me ftm`.")
+    //     "***PATCH NOTES*** \n- watch your words... they may come back to bite you :)");
 });
 
 // EVENT LISTENER for messages being created.
@@ -50,16 +46,17 @@ ftm.on('messageCreate', (message) => {
         return;
     }
 
-    if (message.author.username === 'crayollaaaa' || message.author.username === 'gloobus') {
-        let roll = externalfunctions.randomNum(RATE);
-        
-        if (roll === 1) {
-            message.reply(`bingo! at a rate of 1 in ${RATE}, that took you ${numTries} tries.`);
-            numTries = 1;
-            console.log("did it.");
-        } else {
-            numTries++;
-        }
+    // console.log(message);
+    let messageWords = message.content.split(" ");
+    for (word in messageWords) {
+        messageWords[word] = messageWords[word].toLowerCase();
+    }
+
+    if (messageWords.includes("mark") && messageWords.includes("my") && messageWords.includes("words")) {
+        message.pin(message);
+        message.unpin();
+        message.channel.send("your words have been marked.");
+        return;
     }
 
     if (message.content === 'ftm goat') {
@@ -134,7 +131,7 @@ ftm.on('messageCreate', (message) => {
             );
             return;
         case 'documentation ftm':
-            message.reply('https://github.com/nndpznn/FreeThrowMerchant');
+            message.channel.send('made with love and care <3 and nodejs \n https://github.com/nndpznn/FreeThrowMerchant');
             return;
         case 'if no one got me i know ftm got me':
             if (message.author.username === 'heynoln') {
