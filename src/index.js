@@ -14,6 +14,7 @@ const { Client, IntentsBitField, InteractionCollector } = require("discord.js");
 require("dotenv").config();
 let externalfunctions = require("./externalfunctions");
 let XMLHttpRequest = require("xhr2").XMLHttpRequest;
+const { CronJob } = require("cron");
 
 const API_KEY = "0f065204-dba8-428a-9a9a-e51406aba334";
 
@@ -31,14 +32,27 @@ const ftm = new Client({
   ],
 });
 
+// const job = new CronJob("0 00 00 * * *", () => {
+//   ftm.channels.cache.get("818687286161702954").send("happy birthday nolan!");
+// });
+
+// job.start();
+
 ftm.on("ready", (f) => {
   console.log(`${f.user.username} is at the line, baby.`);
-  // ftm.channels.cache.get("806334669280247829").send(`${f.user.username} is at the line, baby.`);
-  // ftm.channels.cache.get("806334669280247829").send("https://tenor.com/view/jordan-airball-missed-shot-basketball-free-throw-gif-13115757");
+  // ftm.channels.cache.get("1249562113199050792").send("henlo");
+  // ftm.channels.cache
+  //   .get("806334669280247829")
+  //   .send(`${f.user.username} is at the line, baby.`);
+  // ftm.channels.cache
+  //   .get("806334669280247829")
+  //   .send(
+  //     "https://tenor.com/view/jordan-airball-missed-shot-basketball-free-throw-gif-13115757",
+  //   );
   // ftm.channels.cache
   //   .get("1208837446209380412")
   //   .send(
-  //     "***PATCH NOTES*** \n- listing more commands on `help me ftm` \n- 'mark my words' now actually marks words. please don't abuse this.",
+  //     "***PATCH NOTES*** \n- modifying personal link commands to embed the link in text(cleaner) \n- new `ftm suggest` command for the new google form!",
   //   );
 });
 
@@ -65,30 +79,56 @@ ftm.on("messageCreate", (message) => {
     return;
   }
 
-  // Default responses.
+  // Static response set.
+  const basicResponseMap = new Map();
+  basicResponseMap.set("we online?", "yes, online.");
+  basicResponseMap.set(
+    "ftm help",
+    "Here's a list of commands you can use right now. \n- `we online?` checks the online status of FTM. \n- `ftm doc` returns a link to the github documentation for this bot. \n- `ftm who is nolan` links to the personal site of yours truly. `akira` and `tyler` also work. \n- `ftmsearch [player name]` returns the top search result for your entry in the nba player database. \n- `how many free throws does joel embiid have right now` gives the eternally correct answer to that question. \n- there are a few more hidden commands known only to a few ... but you'll see them around.",
+  );
+  basicResponseMap.set(
+    "ftm suggest",
+    "[let's see what nolan thinks...](https://forms.gle/zEnJa4haN3S7F53T9)",
+  );
+  basicResponseMap.set(
+    "ftm doc",
+    "[made with love and care <3 and nodejs](https://github.com/nndpznn/FreeThrowMerchant)",
+  );
+  basicResponseMap.set(
+    "ftm what day is it",
+    `${externalfunctions.formatCurrentDate()}.`,
+  );
+  basicResponseMap.set(
+    "ftm who is nolan",
+    "[thought you'd never ask.](https://nndpznn.github.io/)",
+  );
+  basicResponseMap.set(
+    "ftm who is tyler",
+    "[hire this man.](https://tyleranthonylee.myportfolio.com/)",
+  );
+  basicResponseMap.set(
+    "ftm who is akira",
+    "[this guy builds things.](https://akiraytamaoki.wixsite.com/portfolio)",
+  );
+  basicResponseMap.set(
+    "how many free throws does joel embiid have right now",
+    "too many.",
+  );
+
+  if (basicResponseMap.has(message.content)) {
+    message.reply(basicResponseMap.get(message.content));
+    return;
+  }
+
+  // Dynamic Response Set
   switch (message.content) {
-    case "we online?":
-      message.reply("yes, online.");
-      return;
-
-    case "help me ftm":
-      message.channel.send(
-        "Here's a list of commands you can use right now. \n- `we online?` checks the online status of FTM. \n- `doc ftm` returns a link to the github documentation for this bot. \n- `ftm who's nolan` links to the personal site of yours truly. \n- `ftm [player name]` returns the top search result for your entry in the nba player database. \n- `gimme teams` returns a poorly-thought-out list of every team in the NBA. i'm currently using it to test a future feature, but go ahead and abuse it anyways. \n- `how many free throws does joel embiid have right now` gives the eternally correct answer to that question. \n- there are a few more hidden commands known only to a few ... but you'll see them around.",
-      );
-      return;
-
-    case "doc ftm":
-      message.channel.send(
-        "made with love and care <3 and nodejs \n https://github.com/nndpznn/FreeThrowMerchant",
-      );
-      return;
-
-    case "ftm who's nolan":
-      message.channel.send(
-        "thought you'd never ask. \n https://nndpznn.github.io/",
-      );
-      return;
-
+    case "swag":
+      if (externalfunctions.randomNum(30) === 27) {
+        message.channel.send("punch a bitch");
+        return;
+      } else {
+        return;
+      }
     case "if no one got me i know ftm got me":
       if (message.author.username === "heynoln") {
         message.reply("yk we locked in :handshake:");
@@ -100,14 +140,8 @@ ftm.on("messageCreate", (message) => {
         message.reply("bro who are you");
         return;
       }
-
-    case "how many free throws does joel embiid have right now":
-      message.reply("too many.");
-      return;
-
     case "ftm shut up":
       let responses = [
-        "nah you shut up",
         "don't hmu again",
         "shut up lil bro",
         "really beefing with a DISCORD BOT dawg",
@@ -115,6 +149,8 @@ ftm.on("messageCreate", (message) => {
         "ratio",
         "retire",
         "hang it up bruh",
+        "<:hyuga:1125347223249616977>",
+        "don't come to the next catchup",
       ];
 
       message.channel.send(
@@ -122,25 +158,25 @@ ftm.on("messageCreate", (message) => {
       );
       return;
 
-    case "gimme teams":
-      let teamRequest = new XMLHttpRequest();
-      teamRequest.open("GET", "http://api.balldontlie.io/v1/teams", true);
-      teamRequest.setRequestHeader("Authorization", API_KEY);
+    // case "gimme teams":
+    //   let teamRequest = new XMLHttpRequest();
+    //   teamRequest.open("GET", "http://api.balldontlie.io/v1/teams", true);
+    //   teamRequest.setRequestHeader("Authorization", API_KEY);
 
-      teamRequest.onload = async function () {
-        let data = await JSON.parse(this.response);
+    //   teamRequest.onload = async function () {
+    //     let data = await JSON.parse(this.response);
 
-        if (teamRequest.status >= 200 && teamRequest.status < 400) {
-          data.data.forEach((team) => {
-            message.channel.send(team.full_name);
-          });
-        } else {
-          console.log("error");
-        }
-      };
+    //     if (teamRequest.status >= 200 && teamRequest.status < 400) {
+    //       data.data.forEach((team) => {
+    //         message.channel.send(team.full_name);
+    //       });
+    //     } else {
+    //       console.log("error");
+    //     }
+    //   };
 
-      teamRequest.send();
-      return;
+    //   teamRequest.send();
+    //   return;
 
     case "ftm goat":
       message.channel.send(
@@ -153,12 +189,53 @@ ftm.on("messageCreate", (message) => {
   }
 
   // FTM SEARCH PLAYER FUNCTION
-  if (message.content.slice(0, 3).toLowerCase() == "ftm") {
-    if (
-      message.channel != "806334669280247829" &&
-      message.channel != "966932808369045514" &&
-      message.channel != "768234528808370186"
-    ) {
+  let allowedChannels = [
+    "806334669280247829", // #test-channel in TWCO
+    "966932808369045514", // #sports in TWCO
+    "768234528808370186", // #breneral in TWCO
+    "1249562113199050792", // #nolan-testing in sophomores
+  ];
+
+  if (message.content === "ftmgames") {
+    console.log(
+      `received, sending for date ${externalfunctions.formatCurrentDate()}`,
+    );
+    //
+    let gameRequest = new XMLHttpRequest();
+    gameRequest.open(
+      "GET",
+      `https://api.balldontlie.io/v1/games?start_date=${externalfunctions.formatCurrentDate()}`,
+    );
+    gameRequest.setRequestHeader("Authorization", API_KEY);
+
+    gameRequest.onload = function () {
+      let data = JSON.parse(this.response);
+
+      if (gameRequest.status >= 200 && gameRequest.status < 400) {
+        if (data.data.length > 0) {
+          let nextGame = data.data[0];
+          message.channel.send(
+            "Here is the next or current game happening this season.",
+          );
+          message.channel.send(
+            `__${nextGame.date}__ \n**${nextGame.home_team.abbreviation} ${nextGame.home_team_score} - ${nextGame.visitor_team_score} ${nextGame.visitor_team.abbreviation}** \n${nextGame.status}${nextGame.time === null ? "" : ` - ${nextGame.time} remains.`}`,
+          );
+        } else {
+          message.channel.send(
+            "There are no future games for this season! Or Nolan messed up. Either way...",
+          );
+        }
+      } else {
+        console.log(`ERROR ${gameRequest.status}`);
+      }
+    };
+
+    gameRequest.send();
+    return;
+  }
+
+  if (message.content.startsWith("ftmsearch")) {
+    if (!allowedChannels.includes(message.channelId)) {
       message.channel.send(
         "uhhh... i don't think i'm allowed to talk sports in here.",
       );
@@ -180,23 +257,21 @@ ftm.on("messageCreate", (message) => {
 
       if (firstNameRequest.status >= 200 && firstNameRequest.status < 400) {
         if (data.data.length > 0) {
-          for (player in data.data) {
-            console.log(data.data[player].last_name);
-            if (messageWords.length > 2) {
+          if (messageWords.length > 2) {
+            for (player in data.data) {
               if (
                 data.data[player].last_name
                   .slice(0, messageWords[2].length)
                   .toLowerCase() === messageWords[2].toLowerCase()
               ) {
                 correctPlayer = data.data[player];
-                console.log("correct player found!");
                 break;
               } else {
                 continue;
               }
-            } else {
-              correctPlayer = data.data[0];
             }
+          } else {
+            correctPlayer = data.data[0];
           }
           if (correctPlayer != "none") {
             message.channel.send(
@@ -217,7 +292,6 @@ ftm.on("messageCreate", (message) => {
     };
 
     firstNameRequest.send();
-    // let statRequest = new XMLHttpRequest();
     return;
   }
 });
