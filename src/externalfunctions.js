@@ -23,4 +23,18 @@ module.exports = {
 
     return `${year}-${month}-${day}`;
   },
+
+  dateMap: function (dayInt) {
+    dayInt = (dayInt + 1) % 7;
+    let days = new Map();
+    days.set(0, "Sunday");
+    days.set(1, "Monday");
+    days.set(2, "Tuesday");
+    days.set(3, "Wednesday");
+    days.set(4, "Thursday");
+    days.set(5, "Friday");
+    days.set(6, "Saturday");
+
+    return days.get(dayInt);
+  },
 };

@@ -122,13 +122,6 @@ ftm.on("messageCreate", (message) => {
 
   // Dynamic Response Set
   switch (message.content) {
-    case "swag":
-      if (externalfunctions.randomNum(30) === 27) {
-        message.channel.send("punch a bitch");
-        return;
-      } else {
-        return;
-      }
     case "if no one got me i know ftm got me":
       if (message.author.username === "heynoln") {
         message.reply("yk we locked in :handshake:");
@@ -188,14 +181,6 @@ ftm.on("messageCreate", (message) => {
       return;
   }
 
-  // FTM SEARCH PLAYER FUNCTION
-  let allowedChannels = [
-    "806334669280247829", // #test-channel in TWCO
-    "966932808369045514", // #sports in TWCO
-    "768234528808370186", // #breneral in TWCO
-    "1249562113199050792", // #nolan-testing in sophomores
-  ];
-
   if (message.content === "ftmgames") {
     console.log(
       `received, sending for date ${externalfunctions.formatCurrentDate()}`,
@@ -218,7 +203,7 @@ ftm.on("messageCreate", (message) => {
             "Here is the next or current game happening this season.",
           );
           message.channel.send(
-            `__${nextGame.date}__ \n**${nextGame.home_team.abbreviation} ${nextGame.home_team_score} - ${nextGame.visitor_team_score} ${nextGame.visitor_team.abbreviation}** \n${nextGame.status}${nextGame.time === null ? "" : ` - ${nextGame.time} remains.`}`,
+            `__${externalfunctions.dateMap(new Date(nextGame.date).getDay())}, ${nextGame.date}__ \n**${nextGame.visitor_team.abbreviation} ${nextGame.visitor_team_score} - ${nextGame.home_team_score} ${nextGame.home_team.abbreviation}** \n${nextGame.status}${nextGame.time === null ? "" : ` - ${nextGame.time} remains.`}`,
           );
         } else {
           message.channel.send(
@@ -233,6 +218,14 @@ ftm.on("messageCreate", (message) => {
     gameRequest.send();
     return;
   }
+
+  // FTM SEARCH PLAYER FUNCTION
+  let allowedChannels = [
+    "806334669280247829", // #test-channel in TWCO
+    "966932808369045514", // #sports in TWCO
+    "768234528808370186", // #breneral in TWCO
+    "1249562113199050792", // #nolan-testing in sophomores
+  ];
 
   if (message.content.startsWith("ftmsearch")) {
     if (!allowedChannels.includes(message.channelId)) {
