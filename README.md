@@ -1,8 +1,8 @@
 ## Introducing FreeThrowMerchant - Basketball's Best Friend.
 
-![ftmdemo1](https://github.com/nndpznn/FreeThrowMerchant/tree/main/src/assets/demo/ftmdemo1.jpg?raw=true)
-![ftmdemo2](https://github.com/nndpznn/FreeThrowMerchant/tree/main/src/assets/demo/ftmdemo2.jpg?raw=true)
-![ftmdemo3](https://github.com/nndpznn/FreeThrowMerchant/tree/main/src/assets/demo/ftmdemo3.jpg?raw=true)
+![ftmdemo1](https://github.com/nndpznn/FreeThrowMerchant/tree/main/src/assets/demo/ftmdemo1.png?raw=true)
+![ftmdemo2](https://github.com/nndpznn/FreeThrowMerchant/tree/main/src/assets/demo/ftmdemo2.png?raw=true)
+![ftmdemo3](https://github.com/nndpznn/FreeThrowMerchant/tree/main/src/assets/demo/ftmdemo3.png?raw=true)
 
 FreeThrowMerchant(FTM) makes it easier to find the NBA stats you need, from the comfort of your own Discord server. The bot provides easy access to digestible player information and game status through intuitive commands.
 
