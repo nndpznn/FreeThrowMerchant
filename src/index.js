@@ -133,22 +133,6 @@ ftm.on("messageCreate", (message) => {
         message.reply("bro who are you");
         return;
       }
-    case "ftm shut up":
-      let responses = [
-        "don't hmu again",
-        "shut up lil bro",
-        "really beefing with a DISCORD BOT dawg",
-        "irrelevant",
-        "ratio",
-        "retire",
-        "hang it up bruh",
-        "<:hyuga:1125347223249616977>",
-        "don't come to the next catchup",
-      ];
-
-      message.channel.send(
-        responses[externalfunctions.randomNum(responses.length)],
-      );
       return;
 
     // case "gimme teams":
@@ -198,13 +182,15 @@ ftm.on("messageCreate", (message) => {
 
       if (gameRequest.status >= 200 && gameRequest.status < 400) {
         if (data.data.length > 0) {
-          let nextGame = data.data[0];
           message.channel.send(
-            "Here is the next or current game happening this season.",
+            "Here are the next or current games happening this season.",
           );
-          message.channel.send(
+          for (nextGame in data.data) {
+            message.channel.send(
             `__${externalfunctions.dateMap(new Date(nextGame.date).getDay())}, ${nextGame.date}__ \n**${nextGame.visitor_team.abbreviation} ${nextGame.visitor_team_score} - ${nextGame.home_team_score} ${nextGame.home_team.abbreviation}** \n${nextGame.status}${nextGame.time === null ? "" : ` - ${nextGame.time} remains.`}`,
           );
+          }
+        
         } else {
           message.channel.send(
             "There are no future games for this season! Or Nolan messed up. Either way...",
