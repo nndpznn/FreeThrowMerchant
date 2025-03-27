@@ -12,7 +12,7 @@ module.exports = {
     let year = d.getFullYear();
 
     let month = String(d.getMonth() + 1);
-    if (d.getMonth() < 10) {
+    if (d.getMonth() < 9) {
       month = zero.concat(month);
     }
 
@@ -37,4 +37,43 @@ module.exports = {
 
     return days.get(dayInt);
   },
+
+  teamMap: function (abbrev) {
+    let teams = new Map();
+    teams.set("ATL", 1)
+    teams.set("BOS", 2)
+    teams.set("BKN", 3)
+    teams.set("CHA", 4)
+    teams.set("CHI", 5)
+    teams.set("CLE", 6)
+    teams.set("DAL", 7)
+    teams.set("DEN", 8)
+    teams.set("DET", 9)
+    teams.set("GSW", 10)
+    teams.set("HOU", 11)
+    teams.set("IND", 12)
+    teams.set("LAC", 13)
+    teams.set("LAL", 14)
+    teams.set("MEM", 15)
+    teams.set("MIA", 16)
+    teams.set("MIL", 17)
+    teams.set("MIN", 18)
+    teams.set("NOP", 19)
+    teams.set("NYK", 20)
+    teams.set("OKC", 21)
+    teams.set("ORL", 22)
+    teams.set("PHI", 23)
+    teams.set("PHX", 24)
+    teams.set("POR", 25)
+    teams.set("SAC", 26)
+    teams.set("SAS", 27)
+    teams.set("TOR", 28)
+    teams.set("UTA", 29)
+    teams.set("WAS", 30)
+
+    if (teams.has(abbrev)) {
+      return teams.get(abbrev)
+    }
+    return 0
+  }
 };
