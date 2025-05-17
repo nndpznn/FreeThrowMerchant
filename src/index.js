@@ -218,7 +218,8 @@ ftm.on("messageCreate", (message) => {
         "it is so over"
       ]
 
-      message.channel.send(stockResponses[externalfunctions.randomNum(stockResponses.length)])
+      message.channel.send(stockResponses[externalfunctions.randomNum(stockResponses.length)]);
+      return;
 
     // case "gimme teams":
     //   let teamRequest = new XMLHttpRequest();
