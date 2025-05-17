@@ -72,11 +72,11 @@ ftm.on("messageCreate", (message) => {
     messageWords[word] = messageWords[word].toLowerCase();
   }
 
-  if (message.content.startsWith("ftm adlib")) {
+  if (message.content.startsWith("ftm adlib") || message.content.startsWith("ftma")) {
     swampIzzon(username)
   }
 
-  if (message.content.startsWith("ftm stop adlib")) {
+  if (message.content.startsWith("ftm stop adlib") || message.content.startsWith("ftmsa")) {
     swampIzzoff(username)
   }
 
@@ -127,7 +127,7 @@ ftm.on("messageCreate", (message) => {
   basicResponseMap.set("we online?", "yes, online.");
   basicResponseMap.set(
     "ftm help",
-    "Here's a list of commands you can use right now. \n- `we online?` checks the online status of FTM. \n- `ftm doc` returns a link to the github documentation for this bot. \n- `ftm who is nolan` links to the personal site of yours truly. `akira` and `tyler` also work. \n- `ftmgames [team abbreviation(OPTIONAL)]` returns the next or current 5 games. including team abbreviation narrows search down to that team's games. \n- `ftmsearch [player name]` returns the top search result for your entry in the nba player database. \n- `how many free throws does joel embiid have right now` gives the eternally correct answer to that question. \n- there are a few more hidden commands known only to a few ... but you'll see them around.",
+    "Here's a list of commands you can use right now. \n- `we online?` checks the online status of FTM. \n- `ftm doc` returns a link to the github documentation for this bot. \n- `ftm who is nolan` links to the personal site of yours truly. `akira` and `tyler` also work. \n- `ftmgames [team abbreviation(OPTIONAL)]` returns the next or current 5 games. including team abbreviation narrows search down to that team's games. \n- `ftmsearch [player name]` returns the top search result for your entry in the nba player database. \n- `how many free throws does shai have right now` gives the eternally correct answer to that question. \n- there are a few more hidden commands known only to a few ... but you'll see them around.",
   );
   basicResponseMap.set(
     "ftm suggest",
@@ -150,7 +150,7 @@ ftm.on("messageCreate", (message) => {
     "[this guy builds things.](https://akiratamaoki.myportfolio.com/home)",
   );
   basicResponseMap.set(
-    "how many free throws does joel embiid have right now",
+    "how many free throws does shai have right now",
     "too many.",
   );
 
@@ -199,6 +199,26 @@ ftm.on("messageCreate", (message) => {
         responses[externalfunctions.randomNum(responses.length)],
       );
       return;
+    case "ftm market check":
+      let stockResponses = [
+        "bad",
+        "good",
+        "REALLY BAD!",
+        "REALLY GOOD!",
+        "[ask the goat](https://x.com/jimcramer)",
+        "[ask the REAL goat](https://x.com/cramertracker)",
+        "CANCUN!!!",
+        "sell everything",
+        "buy EVERYTHING",
+        "you're cooked",
+        "bad?",
+        "good?",
+        "i can't even look",
+        "we are so back",
+        "it is so over"
+      ]
+
+      message.channel.send(responsesresponses[externalfunctions.randomNum(stockResponses.length)])
 
     // case "gimme teams":
     //   let teamRequest = new XMLHttpRequest();
@@ -273,7 +293,8 @@ ftm.on("messageCreate", (message) => {
         
         } else {
           message.channel.send(
-            "There are no future games for this season! Or Nolan messed up. Either way...",
+            // "There are no future games for this season! Or Nolan messed up. Either way...",
+            "where they goin chat",
           );
         }
       } else {
